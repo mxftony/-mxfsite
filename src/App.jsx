@@ -4,6 +4,7 @@ const pozePrincipale = [
   "/poza1.jpg",
   "/poza2.jpg",
   "/poza3.jpg",
+  "/poza4.jpg",
 ];
 
 const pozeComplete = [
@@ -75,7 +76,7 @@ export default function App() {
           textShadow: "2px 2px 4px #000000",
         }}
       >
-        MXFSEVEN - Detailing Interior
+        MXF SEVEN - Detailing Interior
       </h1>
     </header>
   );
