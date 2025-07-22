@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 
 const pozePrincipale = [
-  "/poza1.jpg",
-  "/poza2.jpg",
-  "/poza3.jpg",
-  "/poza4.jpg",
+  ["/poza1.jpg", "/poza1.png"],
+  ["/poza2.jpg", "/poza2.png"],
+  ["/poza3.jpg", "/poza3.png"],
+  ["/poza4.jpg", "/poza4.png"],
 ];
 
+
 const pozeComplete = [
-  "/poza1.jpg",
-  "/poza2.jpg",
-  "/poza3.jpg",
-  "/poza4.jpg",
-  "/poza5.jpg",
-  "/poza6.jpg",
+  ["/poza1.jpg", "/poza1.png"],
+  ["/poza2.jpg", "/poza2.png"],
+  ["/poza3.jpg", "/poza3.png"],
+  ["/poza4.jpg", "/poza4.png"],
+  ["/poza5.jpg", "/poza5.png"],
+  ["/poza6.jpg", "/poza6.png"],
 ];
 
 export default function App() {
