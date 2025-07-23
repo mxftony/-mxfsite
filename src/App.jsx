@@ -75,7 +75,7 @@ export default function App() {
     <header
       style={{
         width: "100%",
-        padding: "40px 0 20px",
+        padding: "20px 0 10px",
         textAlign: "center",
         borderBottom: "3px solid #A52A2A",
         backgroundColor: "rgba(47, 79, 79, 0.85)",
@@ -86,8 +86,8 @@ export default function App() {
         src="/logo.png"
         alt="MXFSeven Logo"
         style={{
-          height: 200,
-          marginBottom: 20,
+          height: 150,
+          marginBottom: 10,
           objectFit: "contain",
           userSelect: "none",
         }}
@@ -97,7 +97,7 @@ export default function App() {
         style={{
           margin: 0,
           fontWeight: "900",
-          fontSize: "3rem",
+          fontSize: "2.5rem",
           color: "#FFC0CB",
           userSelect: "none",
           textShadow: "2px 2px 4px #000000",
@@ -105,21 +105,21 @@ export default function App() {
       >
         MXF SEVEN - Detailing Auto Mobil
       </h1>
-      <nav style={{ marginTop: 20 }}>
+      <nav style={{ marginTop: 20, display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 10 }}>
         {['home', 'galerie', 'programare'].map(page => (
           <button
             key={page}
             onClick={() => goTo(page)}
             style={{
-              margin: '0 10px',
-              padding: '10px 20px',
+              padding: '10px 25px',
               background: pagina === page ? '#A52A2A' : 'transparent',
               border: '2px solid #A52A2A',
               borderRadius: 20,
               color: '#FFE4E1',
               cursor: 'pointer',
               fontWeight: pagina === page ? 'bold' : 'normal',
-              transition: 'all 0.3s'
+              transition: 'all 0.3s',
+              minWidth: 120
             }}
           >
             {page === 'home' && 'Acasă'}
@@ -676,24 +676,19 @@ export default function App() {
       <footer
         style={{
           width: "100%",
-          padding: 25,
+          padding: "15px 25px",
           textAlign: "center",
           borderTop: "3px solid #A52A2A",
           backgroundColor: "rgba(47, 79, 79, 0.9)",
           color: "#FFC0CB",
-          fontSize: "1rem",
+          fontSize: "0.9rem",
           userSelect: "none",
           marginTop: "auto",
         }}
       >
-        <p style={{ margin: 0, paddingBottom: 5 }}>
-          © Toate drepturile rezervate MXF SEVEN
-        </p>
         <p style={{ margin: 0 }}>
-          Telefon:{" "}
-          <a href="tel:+40740591626" style={{ color: "#FFC0CB" }}>
-            0740 591 626
-          </a>
+          © Toate drepturile rezervate MXF SEVEN | 
+          Telefon: <a href="tel:+40740591626" style={{ color: "#FFC0CB", textDecoration: 'none' }}>0740 591 626</a>
         </p>
       </footer>
     </div>
