@@ -250,19 +250,19 @@ export default function App() {
               titlu: 'Curățare completă interior',
               descriere: 'Curățare profundă a tuturor suprafețelor inclusiv scaune, covorașe, plafonieră și zone greu accesibile',
               durata: '3-5 ore',
-              pret: 'de la 300 RON'
+              pret: 'de la: suna pentru oferta'
             },
             {
               titlu: 'Detailing piele',
               descriere: 'Curățare, hidratare și protecție pentru scaune și elemente din piele',
               durata: '2-3 ore',
-              pret: 'de la 200 RON'
+              pret: 'de la: suna pentru oferta'
             },
             {
               titlu: 'Pachet premium',
               descriere: 'Toate serviciile + tratament anti-bacterian și parfumare profesională',
               durata: '5-7 ore',
-              pret: 'de la 500 RON'
+              pret: 'de la suna pentru oferta'
             }
           ].map((serviciu, i) => (
             <div key={i} style={{ 
