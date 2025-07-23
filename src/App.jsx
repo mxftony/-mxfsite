@@ -76,7 +76,7 @@ export default function App() {
           textShadow: "2px 2px 4px #000000",
         }}
       >
-        MXF SEVEN - Detailing Interior
+        MXF SEVEN - Detailing Auto Mobil
       </h1>
     </header>
   );
