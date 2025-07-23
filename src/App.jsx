@@ -75,7 +75,7 @@ export default function App() {
     <header
       style={{
         width: "100%",
-        padding: "20px 0 10px",
+        padding: "10px 0 5px",
         textAlign: "center",
         borderBottom: "3px solid #A52A2A",
         backgroundColor: "rgba(47, 79, 79, 0.85)",
@@ -86,7 +86,7 @@ export default function App() {
         src="/logo.png"
         alt="MXFSeven Logo"
         style={{
-          height: 150,
+          height: 200,
           marginBottom: 10,
           objectFit: "contain",
           userSelect: "none",
