@@ -19,6 +19,13 @@ const pozeComplete = [
 export default function App() {
   const [pagina, setPagina] = useState("home"); // home | galerie | programare
   const [modalImg, setModalImg] = useState(null);
+  const [formData, setFormData] = useState({
+    nume: '',
+    telefon: '',
+    email: '',
+    data: '',
+    mesaj: ''
+  });
 
   const openModal = (src) => setModalImg(src);
   const closeModal = () => setModalImg(null);
@@ -28,6 +35,17 @@ export default function App() {
     window.scrollTo(0, 0);
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    alert('Programare trimisă! Vă vom contacta în cel mai scurt timp.');
+    goTo('home');
+  };
+
   const wrapperStyle = {
     minHeight: "100vh",
     width: "100vw",
@@ -35,13 +53,22 @@ export default function App() {
     padding: 0,
     background: "linear-gradient(135deg, #8B0000, #2F4F4F)",
     color: "#F5F5F5",
-    fontFamily:
-      "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     boxSizing: "border-box",
     overflowX: "hidden",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+  };
+
+  const inputStyle = {
+    width: '100%',
+    padding: 15,
+    marginBottom: 20,
+    borderRadius: 10,
+    border: '2px solid #A52A2A',
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    fontSize: '1rem'
   };
 
   const Header = () => (
@@ -78,11 +105,35 @@ export default function App() {
       >
         MXF SEVEN - Detailing Auto Mobil
       </h1>
+      <nav style={{ marginTop: 20 }}>
+        {['home', 'galerie', 'programare'].map(page => (
+          <button
+            key={page}
+            onClick={() => goTo(page)}
+            style={{
+              margin: '0 10px',
+              padding: '10px 20px',
+              background: pagina === page ? '#A52A2A' : 'transparent',
+              border: '2px solid #A52A2A',
+              borderRadius: 20,
+              color: '#FFE4E1',
+              cursor: 'pointer',
+              fontWeight: pagina === page ? 'bold' : 'normal',
+              transition: 'all 0.3s'
+            }}
+          >
+            {page === 'home' && 'Acasă'}
+            {page === 'galerie' && 'Galerie'}
+            {page === 'programare' && 'Programare'}
+          </button>
+        ))}
+      </nav>
     </header>
   );
 
-  const Button = ({ onClick, children, ariaLabel }) => (
+  const Button = ({ onClick, children, ariaLabel, type = "button" }) => (
     <button
+      type={type}
       onClick={onClick}
       style={{
         marginTop: 35,
@@ -192,24 +243,77 @@ export default function App() {
         >
           Servicii Detailing Interior
         </h2>
-        <ul style={{ marginTop: 20, paddingLeft: 25 }}>
-          <li>Curățare tapițerie și covorașe</li>
-          <li>Curățare și hidratare bord și plastic</li>
-          <li>Curățare piele și protecție cu produse specializate</li>
-          <li>Curățare geamuri și oglinzi</li>
-          <li>Dezodorizare și eliminare mirosuri neplăcute</li>
-        </ul>
-        <p
-          style={{
-            marginTop: 30,
-            fontWeight: "700",
-            fontSize: "1.3rem",
-            color: "#FF7F7F",
-          }}
-        >
-          Prețurile variază în funcție de gradul de murdărie și complexitatea
-          serviciilor solicitate.
-        </p>
+        
+        <div style={{ marginTop: 30 }}>
+          {[
+            {
+              titlu: 'Curățare completă interior',
+              descriere: 'Curățare profundă a tuturor suprafețelor inclusiv scaune, covorașe, plafonieră și zone greu accesibile',
+              durata: '3-5 ore',
+              pret: 'de la 300 RON'
+            },
+            {
+              titlu: 'Detailing piele',
+              descriere: 'Curățare, hidratare și protecție pentru scaune și elemente din piele',
+              durata: '2-3 ore',
+              pret: 'de la 200 RON'
+            },
+            {
+              titlu: 'Pachet premium',
+              descriere: 'Toate serviciile + tratament anti-bacterian și parfumare profesională',
+              durata: '5-7 ore',
+              pret: 'de la 500 RON'
+            }
+          ].map((serviciu, i) => (
+            <div key={i} style={{ 
+              marginBottom: 25, 
+              paddingBottom: 15, 
+              borderBottom: '1px dashed #A52A2A' 
+            }}>
+              <h3 style={{ color: '#FFDAB9', fontSize: '1.5rem' }}>{serviciu.titlu}</h3>
+              <p>{serviciu.descriere}</p>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 10 }}>
+                <span>⏱️ {serviciu.durata}</span>
+                <span style={{ fontWeight: 'bold' }}>{serviciu.pret}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section style={{ 
+        width: '90vw', 
+        maxWidth: 1200, 
+        backgroundColor: 'rgba(47, 79, 79, 0.85)', 
+        borderRadius: 25, 
+        padding: 35, 
+        margin: '50px 0',
+        boxShadow: '0 0 30px rgba(165, 42, 42, 0.8)'
+      }}>
+        <h2 style={{ borderBottom: '4px solid #A52A2A', paddingBottom: 14 }}>
+          Ce spun clienții noștri
+        </h2>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, marginTop: 30 }}>
+          {[
+            { nume: 'Andrei M.', text: 'Cel mai bun detailing interior la care am fost! Mașina arată ca nouă.', rating: 5 },
+            { nume: 'Elena D.', text: 'Profesionalism la cel mai înalt nivel. Recomand cu încredere!', rating: 5 },
+            { nume: 'Cristian B.', text: 'Am fost impresionat de atenția la detalii. Voi reveni sigur.', rating: 4 }
+          ].map((recenzie, i) => (
+            <div key={i} style={{ 
+              flex: '1 1 300px', 
+              backgroundColor: 'rgba(139, 0, 0, 0.3)', 
+              padding: 20, 
+              borderRadius: 15,
+              border: '1px solid #A52A2A'
+            }}>
+              <div style={{ color: '#FFD700', fontSize: '1.2rem', marginBottom: 10 }}>
+                {'★'.repeat(recenzie.rating)}{'☆'.repeat(5-recenzie.rating)}
+              </div>
+              <p style={{ fontStyle: 'italic' }}>"{recenzie.text}"</p>
+              <p style={{ fontWeight: 'bold', marginTop: 10 }}>- {recenzie.nume}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section
@@ -267,8 +371,7 @@ export default function App() {
         padding: "40px 20px",
         background: "linear-gradient(135deg, #8B0000, #2F4F4F)",
         color: "#F5F5F5",
-        fontFamily:
-          "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
         boxSizing: "border-box",
         overflowX: "hidden",
         display: "flex",
@@ -339,8 +442,7 @@ export default function App() {
         padding: "40px 20px",
         background: "linear-gradient(135deg, #8B0000, #2F4F4F)",
         color: "#F5F5F5",
-        fontFamily:
-          "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
         boxSizing: "border-box",
         display: "flex",
         flexDirection: "column",
@@ -370,8 +472,63 @@ export default function App() {
           marginBottom: 30,
         }}
       >
-        Pentru a-ți face o programare rapidă și comodă, poți alege una dintre
-        următoarele metode de contact:
+        Completează formularul de mai jos pentru a rezerva o programare:
+      </p>
+
+      <form onSubmit={handleSubmit} style={{ maxWidth: 600, width: '90%', margin: '30px 0' }}>
+        <input
+          type="text"
+          name="nume"
+          placeholder="Nume complet"
+          value={formData.nume}
+          onChange={handleChange}
+          required
+          style={inputStyle}
+        />
+        <input
+          type="tel"
+          name="telefon"
+          placeholder="Telefon"
+          value={formData.telefon}
+          onChange={handleChange}
+          required
+          style={inputStyle}
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          style={inputStyle}
+        />
+        <input
+          type="date"
+          name="data"
+          value={formData.data}
+          onChange={handleChange}
+          required
+          style={inputStyle}
+        />
+        <textarea
+          name="mesaj"
+          placeholder="Detalii despre serviciile dorite"
+          value={formData.mesaj}
+          onChange={handleChange}
+          rows="4"
+          style={{ ...inputStyle, minHeight: 120 }}
+        />
+        <Button type="submit" ariaLabel="Trimite programarea">Trimite programarea</Button>
+      </form>
+
+      <p
+        style={{
+          fontSize: "1.3rem",
+          maxWidth: 700,
+          margin: "30px 0",
+        }}
+      >
+        Sau contactează-ne direct prin:
       </p>
 
       <div
@@ -489,6 +646,31 @@ export default function App() {
           />
         </div>
       )}
+
+      <a 
+        href="https://wa.me/40740591626" 
+        target="_blank" 
+        rel="noreferrer"
+        style={{
+          position: 'fixed',
+          bottom: 30,
+          right: 30,
+          backgroundColor: '#25D366',
+          color: 'white',
+          width: 60,
+          height: 60,
+          borderRadius: '50%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '2rem',
+          boxShadow: '0 0 20px rgba(37, 211, 102, 0.7)',
+          zIndex: 1000
+        }}
+        aria-label="Contactează-ne pe WhatsApp"
+      >
+        <span style={{ marginTop: 5 }}>💬</span>
+      </a>
 
       <footer
         style={{
