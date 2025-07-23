@@ -315,36 +315,7 @@ export default function App() {
           ))}
         </div>
       </section>
-      <section style={{ 
-  width: '90vw', 
-  maxWidth: 1200, 
-  backgroundColor: 'rgba(47, 79, 79, 0.85)', 
-  borderRadius: 25, 
-  padding: 35, 
-  margin: '50px 0',
-  boxShadow: '0 0 30px rgba(165, 42, 42, 0.8)'
-}}>
-  <h2 style={{ borderBottom: '4px solid #A52A2A', paddingBottom: 14, color: '#FFDAB9' }}>
-    Ne găsești aici
-  </h2>
-  <div style={{ marginTop: 30 }}>
-    <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2724.165185630161!2d24.661316776961226!3d47.65694667119214!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4737df89fe9d2de7%3A0x6d7c746cbf917a87!2sMXF%20Seven%20Detailing%20Auto%20Mobil!5e0!3m2!1sen!2sro!4v1721392189201!5m2!1sen!2sro"
-      width="100%"
-      height="450"
-      style={{
-        border: 0,
-        borderRadius: 15,
-        width: '100%',
-        boxShadow: '0 0 20px rgba(0,0,0,0.3)'
-      }}
-      allowFullScreen=""
-      loading="lazy"
-      referrerPolicy="no-referrer-when-downgrade"
-    ></iframe>
-  </div>
-</section>
-
+      
 
       <section
         style={{
