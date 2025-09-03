@@ -1,23 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 
+// Extended to 70 posts (6 real + 64 dummy for demonstration)
 const instagramPostsComplete = [
   "https://www.instagram.com/reel/DLIVmsvtMxr/",
   "https://www.instagram.com/reel/DFNLltsNgt5/",
   "https://www.instagram.com/reel/DMkoQCDsK1J/",
   "https://www.instagram.com/reel/DF3YaKBNacL/",
   "https://www.instagram.com/reel/DFzuzKytlS8/",
-  "https://www.instagram.com/reel/DF2T8cgt601/"
+  "https://www.instagram.com/reel/DF2T8cgt601/",
+  ...Array.from({ length: 64 }, (_, i) => `https://www.instagram.com/reel/dummy${i + 1}/`)
 ];
 
+// Extended descriptions for the 6 real posts; dummy posts get generic descriptions
 const postDescriptions = {
   "https://www.instagram.com/reel/DLIVmsvtMxr/": "Detailing auto mobil în Borșa, Maramureș - interior curățat perfect",
   "https://www.instagram.com/reel/DFNLltsNgt5/": "Produse detailing auto disponibile pe MXF Seven",
   "https://www.instagram.com/reel/DMkoQCDsK1J/": "Prezentare MXF Seven - servicii premium de detailing",
   "https://www.instagram.com/reel/DF3YaKBNacL/": "MXF Seven - detailing auto premium",
   "https://www.instagram.com/reel/DFzuzKytlS8/": "Servicii detailing MXF Seven",
-  "https://www.instagram.com/reel/DF2T8cgt601/": "Curățare mașini la MXF Seven"
+  "https://www.instagram.com/reel/DF2T8cgt601/": "Curățare mașini la MXF Seven",
+  ...Object.fromEntries(
+    Array.from({ length: 64 }, (_, i) => [
+      `https://www.instagram.com/reel/dummy${i + 1}/`,
+      `Postare de test ${i + 1} pentru detailing auto`
+    ])
+  )
 };
+
+// Shuffle function for randomizing posts
+const shuffleArray = (array) => {
+  const shuffled = [...array];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[i], shuffled[j]];
+  }
+  return shuffled;
+};
+
+// Simulated dates for sorting (since Instagram URLs don't provide dates)
+const postsWithDates = instagramPostsComplete.map((url, index) => ({
+  url,
+  date: new Date(2025, 8, 3 - Math.floor(index / 10)).toISOString()
+}));
 
 export default function App() {
   const [pagina, setPagina] = useState("home"); // home | galerie | programare
@@ -30,13 +55,15 @@ export default function App() {
   });
   const [instagramPostsPrincipale, setInstagramPostsPrincipale] = useState([]);
   const [embedLoaded, setEmbedLoaded] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 10;
 
   useEffect(() => {
-    // Select 4 random posts for home page
-    const shuffled = [...instagramPostsComplete].sort(() => 0.5 - Math.random());
+    // Randomize all 70 posts for homepage
+    const shuffled = shuffleArray(instagramPostsComplete);
     setInstagramPostsPrincipale(shuffled.slice(0, 4));
 
-    // Load Instagram embed script if not loaded
+    // Load Instagram embed script
     if (!document.getElementById('instagram-embed-script')) {
       const script = document.createElement('script');
       script.id = 'instagram-embed-script';
@@ -50,25 +77,24 @@ export default function App() {
       setEmbedLoaded(true);
     }
 
-    return () => {
-      // Cleanup if needed
-    };
+    return () => {};
   }, []);
 
   useEffect(() => {
     if (embedLoaded && window.instgrm) {
       window.instgrm.Embeds.process();
     }
-  }, [pagina, embedLoaded, modalPost]);
+  }, [pagina, embedLoaded, modalPost, currentPage]);
 
   const getEmbedCode = (url) => `
-    <blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
+    <blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);" loading="lazy"></blockquote>
   `;
 
   const openModal = (url) => setModalPost(url);
   const closeModal = () => setModalPost(null);
   const goTo = (page) => {
     setPagina(page);
+    setCurrentPage(1); // Reset to page 1 when navigating
     closeModal();
     window.scrollTo(0, 0);
   };
@@ -115,7 +141,7 @@ export default function App() {
     margin: '0 auto',
     overflow: 'hidden',
     position: 'relative',
-    paddingBottom: '125%', // Aspect ratio for Instagram posts (roughly 1:1.25 for reels)
+    paddingBottom: '125%',
   };
 
   const embedInnerStyle = {
@@ -158,6 +184,10 @@ export default function App() {
           color: "#FFC0CB",
           userSelect: "none",
           textShadow: "2px 2px 4px #000000",
+          '@media (maxWidth: 768px)': {
+            fontSize: '1.8rem',
+            marginBottom: '5px'
+          }
         }}
       >
         MXF SEVEN - Detailing Auto Mobil Premium Borșa Maramureș
@@ -249,11 +279,14 @@ export default function App() {
             gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             gap: 24,
             marginTop: 24,
+            '@media (maxWidth: 768px)': {
+              gridTemplateColumns: '1fr' // Single column on mobile for performance
+            }
           }}
         >
           {instagramPostsPrincipale.map((url, i) => (
             <div
-              key={url + i} // Unique key with url to force remount if random changes
+              key={url + i}
               onClick={() => openModal(url)}
               style={{
                 cursor: "pointer",
@@ -271,7 +304,6 @@ export default function App() {
             </div>
           ))}
         </div>
-
         <Button onClick={() => goTo("galerie")} ariaLabel="Vezi toate postările Instagram">
           Vezi toate postările
         </Button>
@@ -300,11 +332,16 @@ export default function App() {
             marginTop: 0,
             fontSize: "2rem",
             fontWeight: "700",
+            '@media (maxWidth: 768px)': {
+              fontSize: '1.5rem',
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }
           }}
         >
-          Servicii Detailing Interior Premium Maramureș
+          Servicii Detailing Auto
         </h2>
-        
         <div style={{ marginTop: 30 }}>
           {[
             {
@@ -376,7 +413,6 @@ export default function App() {
           ))}
         </div>
       </section>
-      
 
       <section
         style={{
@@ -424,74 +460,105 @@ export default function App() {
     </>
   );
 
-  const Galerie = () => (
-    <section
-      style={{
-        minHeight: "100vh",
-        width: "100vw",
-        margin: 0,
-        padding: "40px 20px",
-        background: "linear-gradient(135deg, #8B0000, #2F4F4F)",
-        color: "#F5F5F5",
-        fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-        boxSizing: "border-box",
-        overflowX: "hidden",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        paddingTop: 40,
-        paddingBottom: 40,
-      }}
-    >
-      <h1
+  const Galerie = () => {
+    const sortedPosts = [...postsWithDates].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = sortedPosts.slice(indexOfFirstPost, indexOfLastPost);
+    const totalPages = Math.ceil(sortedPosts.length / postsPerPage);
+
+    const nextPage = () => {
+      if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+    };
+
+    const prevPage = () => {
+      if (currentPage > 1) setCurrentPage(currentPage - 1);
+    };
+
+    return (
+      <section
         style={{
-          fontSize: "3rem",
-          fontWeight: "900",
-          color: "#FFC0CB",
-          userSelect: "none",
-          textShadow: "2px 2px 4px #000000",
-          marginBottom: 40,
-          textAlign: "center",
+          minHeight: "100vh",
+          width: "100vw",
+          margin: 0,
+          padding: "40px 20px",
+          background: "linear-gradient(135deg, #8B0000, #2F4F4F)",
+          color: "#F5F5F5",
+          fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+          boxSizing: "border-box",
+          overflowX: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          paddingTop: 40,
+          paddingBottom: 40,
         }}
       >
-        Galerie completă MXF SEVEN - Detailing Auto
-      </h1>
+        <h1
+          style={{
+            fontSize: "3rem",
+            fontWeight: "900",
+            color: "#FFC0CB",
+            userSelect: "none",
+            textShadow: "2px 2px 4px #000000",
+            marginBottom: 40,
+            textAlign: "center",
+          }}
+        >
+          Galerie completă MXF SEVEN - Detailing Auto
+        </h1>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-          gap: 24,
-          width: "90vw",
-          maxWidth: 1600,
-        }}
-      >
-        {instagramPostsComplete.map((url, i) => (
-          <div
-            key={url + i}
-            onClick={() => openModal(url)}
-            style={{
-              cursor: "pointer",
-              borderRadius: 18,
-              boxShadow: "0 6px 18px rgba(139, 0, 0, 0.7)",
-              transition: "transform 0.3s",
-              ...embedContainerStyle
-            }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-            title={postDescriptions[url]}
-            aria-label={`Post Instagram mașină ${i + 1}`}
-          >
-            <div style={embedInnerStyle} dangerouslySetInnerHTML={{ __html: getEmbedCode(url) }} />
-          </div>
-        ))}
-      </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: 24,
+            width: "90vw",
+            maxWidth: 1600,
+            '@media (maxWidth: 768px)': {
+              gridTemplateColumns: '1fr'
+            }
+          }}
+        >
+          {currentPosts.map(({ url }, i) => (
+            <div
+              key={url + i}
+              onClick={() => openModal(url)}
+              style={{
+                cursor: "pointer",
+                borderRadius: 18,
+                boxShadow: "0 6px 18px rgba(139, 0, 0, 0.7)",
+                transition: "transform 0.3s",
+                ...embedContainerStyle
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              title={postDescriptions[url]}
+              aria-label={`Post Instagram mașină ${i + 1}`}
+            >
+              <div style={embedInnerStyle} dangerouslySetInnerHTML={{ __html: getEmbedCode(url) }} />
+            </div>
+          ))}
+        </div>
 
-      <Button onClick={() => goTo("home")} ariaLabel="Înapoi la pagina principală">
-        Înapoi
-      </Button>
-    </section>
-  );
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 30, gap: 10 }}>
+          <Button onClick={prevPage} ariaLabel="Pagina anterioară" disabled={currentPage === 1}>
+            Anterioară
+          </Button>
+          <span style={{ alignSelf: 'center', fontSize: '1.2rem', color: '#FFE4E1' }}>
+            Pagina {currentPage} din {totalPages}
+          </span>
+          <Button onClick={nextPage} ariaLabel="Pagina următoare" disabled={currentPage === totalPages}>
+            Următoare
+          </Button>
+        </div>
+
+        <Button onClick={() => goTo("home")} ariaLabel="Înapoi la pagina principală">
+          Înapoi
+        </Button>
+      </section>
+    );
+  };
 
   const Programare = () => (
     <section
