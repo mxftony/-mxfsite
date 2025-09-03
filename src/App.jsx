@@ -1,24 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 
-const pozePrincipale = [
-  "/poza1.jpg",
-  "/poza2.png",
-  "/poza3.png",
-  "/poza4.png",
+const instagramPostsPrincipale = [
+  "https://www.instagram.com/reel/DLIVmsvtMxr/",
+  "https://www.instagram.com/reel/DFNLltsNgt5/",
+  "https://www.instagram.com/reel/DMkoQCDsK1J/",
+  "https://www.instagram.com/reel/DF3YaKBNacL/"
 ];
 
-const pozeComplete = [
-  "/poza1.jpg",
-  "/poza2.png",
-  "/poza3.png",
-  "/poza4.png",
-  "/poza5.jpg",
-  "/poza6.jpg",
+const instagramPostsComplete = [
+  "https://www.instagram.com/reel/DLIVmsvtMxr/",
+  "https://www.instagram.com/reel/DFNLltsNgt5/",
+  "https://www.instagram.com/reel/DMkoQCDsK1J/",
+  "https://www.instagram.com/reel/DF3YaKBNacL/",
+  "https://www.instagram.com/reel/DFzuzKytlS8/",
+  "https://www.instagram.com/reel/DF2T8cgt601/"
 ];
+
+const postDescriptions = {
+  "https://www.instagram.com/reel/DLIVmsvtMxr/": "Detailing auto mobil în Borșa, Maramureș - interior curățat perfect",
+  "https://www.instagram.com/reel/DFNLltsNgt5/": "Produse detailing auto disponibile pe MXF Seven",
+  "https://www.instagram.com/reel/DMkoQCDsK1J/": "Prezentare MXF Seven - servicii premium de detailing",
+  "https://www.instagram.com/reel/DF3YaKBNacL/": "MXF Seven - detailing auto premium",
+  "https://www.instagram.com/reel/DFzuzKytlS8/": "Servicii detailing MXF Seven",
+  "https://www.instagram.com/reel/DF2T8cgt601/": "Curățare mașini la MXF Seven"
+};
 
 export default function App() {
   const [pagina, setPagina] = useState("home"); // home | galerie | programare
-  const [modalImg, setModalImg] = useState(null);
+  const [modalPost, setModalPost] = useState(null);
   const [formData, setFormData] = useState({
     nume: '',
     telefon: '',
@@ -27,8 +37,22 @@ export default function App() {
     mesaj: ''
   });
 
-  const openModal = (src) => setModalImg(src);
-  const closeModal = () => setModalImg(null);
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = "//www.instagram.com/embed.js";
+    script.async = true;
+    document.body.appendChild(script);
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  const getEmbedCode = (url) => `
+    <blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
+  `;
+
+  const openModal = (url) => setModalPost(url);
+  const closeModal = () => setModalPost(null);
   const goTo = (page) => {
     setPagina(page);
     closeModal();
@@ -84,7 +108,7 @@ export default function App() {
     >
       <img
         src="/logo.png"
-        alt="MXFSeven Logo"
+        alt="MXF Seven Logo - Detailing Auto Premium Borșa"
         style={{
           height: 200,
           marginBottom: 10,
@@ -103,7 +127,7 @@ export default function App() {
           textShadow: "2px 2px 4px #000000",
         }}
       >
-        MXF SEVEN - Detailing Auto Mobil
+        MXF SEVEN - Detailing Auto Mobil Premium Borșa Maramureș
       </h1>
       <nav style={{ marginTop: 20, display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 10 }}>
         {['home', 'galerie', 'programare'].map(page => (
@@ -146,11 +170,17 @@ export default function App() {
         fontSize: "1.2rem",
         cursor: "pointer",
         boxShadow: "0 0 25px rgba(139, 0, 0, 0.85)",
-        transition: "background-color 0.25s ease",
+        transition: "background-color 0.25s ease, transform 0.2s",
         userSelect: "none",
       }}
-      onMouseEnter={(e) => (e.target.style.backgroundColor = "#A52A2A")}
-      onMouseLeave={(e) => (e.target.style.backgroundColor = "#8B0000")}
+      onMouseEnter={(e) => {
+        e.target.style.backgroundColor = "#A52A2A";
+        e.target.style.transform = "scale(1.05)";
+      }}
+      onMouseLeave={(e) => {
+        e.target.style.backgroundColor = "#8B0000";
+        e.target.style.transform = "scale(1)";
+      }}
       aria-label={ariaLabel}
     >
       {children}
@@ -178,7 +208,7 @@ export default function App() {
             fontWeight: "700",
           }}
         >
-          Galerie Mașini Detailing
+          Galerie Mașini Detailing Auto Borșa
         </h2>
         <div
           style={{
@@ -186,33 +216,31 @@ export default function App() {
             gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
             gap: 24,
             marginTop: 24,
-            cursor: "pointer",
           }}
         >
-          {pozePrincipale.map((src, i) => (
-            <img
+          {instagramPostsPrincipale.map((url, i) => (
+            <div
               key={i}
-              src={src}
-              alt={`Mașina ${i + 1}`}
+              onClick={() => openModal(url)}
               style={{
-                width: "100%",
+                cursor: "pointer",
                 borderRadius: 18,
                 boxShadow: "0 6px 18px rgba(139, 0, 0, 0.7)",
-                objectFit: "cover",
-                aspectRatio: "4 / 3",
+                overflow: "hidden",
                 transition: "transform 0.3s",
-                userSelect: "none",
               }}
-              onClick={() => openModal(src)}
               onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
               onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-              draggable={false}
-            />
+              title={postDescriptions[url]}
+              aria-label={`Post Instagram detailing auto ${i + 1}`}
+            >
+              <div dangerouslySetInnerHTML={{ __html: getEmbedCode(url) }} />
+            </div>
           ))}
         </div>
 
-        <Button onClick={() => goTo("galerie")} ariaLabel="Vezi toate pozele">
-          Vezi toate pozele
+        <Button onClick={() => goTo("galerie")} ariaLabel="Vezi toate postările Instagram">
+          Vezi toate postările
         </Button>
       </section>
 
@@ -241,7 +269,7 @@ export default function App() {
             fontWeight: "700",
           }}
         >
-          Servicii Detailing Interior
+          Servicii Detailing Interior Premium Maramureș
         </h2>
         
         <div style={{ marginTop: 30 }}>
@@ -250,19 +278,19 @@ export default function App() {
               titlu: 'Curățare completă interior',
               descriere: 'Curățare profundă a tuturor suprafețelor inclusiv scaune, covorașe, plafonieră și zone greu accesibile',
               durata: '3-5 ore',
-              pret: 'de la: suna pentru oferta'
+              pret: 'de la: sună pentru ofertă'
             },
             {
               titlu: 'Detailing piele',
               descriere: 'Curățare, hidratare și protecție pentru scaune și elemente din piele',
               durata: '2-3 ore',
-              pret: 'de la: suna pentru oferta'
+              pret: 'de la: sună pentru ofertă'
             },
             {
               titlu: 'Pachet premium',
               descriere: 'Toate serviciile + tratament anti-bacterian și parfumare profesională',
               durata: '5-7 ore',
-              pret: 'de la suna pentru oferta'
+              pret: 'de la: sună pentru ofertă'
             }
           ].map((serviciu, i) => (
             <div key={i} style={{ 
@@ -291,7 +319,7 @@ export default function App() {
         boxShadow: '0 0 30px rgba(165, 42, 42, 0.8)'
       }}>
         <h2 style={{ borderBottom: '4px solid #A52A2A', paddingBottom: 14 }}>
-          Ce spun clienții noștri
+          Ce spun clienții noștri despre serviciile de detailing auto
         </h2>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, marginTop: 30 }}>
           {[
@@ -335,7 +363,7 @@ export default function App() {
             userSelect: "none",
           }}
         >
-          Contact & Programare
+          Contact & Programare Detailing Auto Borșa
         </h2>
         <p style={{ fontSize: "1.2rem", marginTop: 28 }}>
           Email:{" "}
@@ -356,7 +384,7 @@ export default function App() {
           </a>
         </p>
 
-        <Button onClick={() => goTo("programare")} ariaLabel="Buton programare">
+        <Button onClick={() => goTo("programare")} ariaLabel="Buton programare detailing">
           Fă-ți o programare
         </Button>
       </section>
@@ -393,7 +421,7 @@ export default function App() {
           textAlign: "center",
         }}
       >
-        Galerie completă MXFSEVEN
+        Galerie completă MXF SEVEN - Detailing Auto
       </h1>
 
       <div
@@ -405,26 +433,24 @@ export default function App() {
           maxWidth: 1600,
         }}
       >
-        {pozeComplete.map((src, i) => (
-          <img
+        {instagramPostsComplete.map((url, i) => (
+          <div
             key={i}
-            src={src}
-            alt={`Mașina ${i + 1}`}
+            onClick={() => openModal(url)}
             style={{
-              width: "100%",
+              cursor: "pointer",
               borderRadius: 18,
               boxShadow: "0 6px 18px rgba(139, 0, 0, 0.7)",
-              objectFit: "cover",
-              aspectRatio: "4 / 3",
-              cursor: "pointer",
+              overflow: "hidden",
               transition: "transform 0.3s",
-              userSelect: "none",
             }}
-            onClick={() => openModal(src)}
             onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
             onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-            draggable={false}
-          />
+            title={postDescriptions[url]}
+            aria-label={`Post Instagram mașină ${i + 1}`}
+          >
+            <div dangerouslySetInnerHTML={{ __html: getEmbedCode(url) }} />
+          </div>
         ))}
       </div>
 
@@ -463,7 +489,7 @@ export default function App() {
           marginBottom: 40,
         }}
       >
-        Fă-ți o programare la MXF SEVEN
+        Fă-ți o programare la MXF SEVEN Detailing Auto
       </h1>
 
       <p
@@ -473,7 +499,7 @@ export default function App() {
           marginBottom: 30,
         }}
       >
-        Completează formularul de mai jos pentru a rezerva o programare:
+        Completează formularul de mai jos pentru a rezerva o programare pentru detailing auto:
       </p>
 
       <form onSubmit={handleSubmit} style={{ maxWidth: 600, width: '90%', margin: '30px 0' }}>
@@ -513,7 +539,7 @@ export default function App() {
         />
         <textarea
           name="mesaj"
-          placeholder="Detalii despre serviciile dorite"
+          placeholder="Detalii despre serviciile dorite (ex: detailing interior, curățare piele)"
           value={formData.mesaj}
           onChange={handleChange}
           rows="4"
@@ -557,7 +583,10 @@ export default function App() {
             boxShadow: "0 0 15px #25D366",
             flex: "1 1 200px",
             userSelect: "none",
+            transition: "transform 0.2s",
           }}
+          onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
+          onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
           aria-label="Contactează pe WhatsApp"
         >
           WhatsApp
@@ -578,7 +607,10 @@ export default function App() {
             boxShadow: "0 0 15px #1877F2",
             flex: "1 1 200px",
             userSelect: "none",
+            transition: "transform 0.2s",
           }}
+          onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
+          onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
           aria-label="Pagina de Facebook"
         >
           Facebook
@@ -599,7 +631,10 @@ export default function App() {
             boxShadow: "0 0 15px #E1306C",
             flex: "1 1 200px",
             userSelect: "none",
+            transition: "transform 0.2s",
           }}
+          onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
+          onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
           aria-label="Pagina de Instagram"
         >
           Instagram
@@ -613,84 +648,94 @@ export default function App() {
   );
 
   return (
-    <div style={wrapperStyle}>
-      <Header />
-      {pagina === "home" && <Home />}
-      {pagina === "galerie" && <Galerie />}
-      {pagina === "programare" && <Programare />}
+    <>
+      <Helmet>
+        <title>MXF Seven - Detailing Auto Mobil Premium în Borșa, Maramureș</title>
+        <meta name="description" content="Servicii profesionale de detailing auto interior și exterior în Borșa, Maramureș. Curățare profundă, protecție piele, pachete premium. Programează-te acum la 0740 591 626." />
+        <meta name="keywords" content="detailing auto Borsa, detailing interior Maramures, curatare masini premium, servicii detailing auto, detailing mobil Borsa, MXF Seven" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://www.mxfseven.com/" />
+      </Helmet>
+      <div style={wrapperStyle}>
+        <Header />
+        {pagina === "home" && <Home />}
+        {pagina === "galerie" && <Galerie />}
+        {pagina === "programare" && <Programare />}
 
-      {modalImg && (
-        <div
-          onClick={closeModal}
+        {modalPost && (
+          <div
+            onClick={closeModal}
+            style={{
+              position: "fixed",
+              inset: 0,
+              backgroundColor: "rgba(0,0,0,0.85)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "zoom-out",
+              zIndex: 9999,
+            }}
+          >
+            <div 
+              style={{
+                maxWidth: "90vw",
+                maxHeight: "90vh",
+                borderRadius: 15,
+                boxShadow: "0 0 30px rgba(255, 255, 255, 0.8)",
+                overflow: "auto",
+              }}
+              dangerouslySetInnerHTML={{ __html: getEmbedCode(modalPost) }}
+            />
+          </div>
+        )}
+
+        <a 
+          href="https://wa.me/40740591626" 
+          target="_blank" 
+          rel="noreferrer"
           style={{
-            position: "fixed",
-            inset: 0,
-            backgroundColor: "rgba(0,0,0,0.85)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            cursor: "zoom-out",
-            zIndex: 9999,
+            position: 'fixed',
+            bottom: 30,
+            right: 30,
+            backgroundColor: '#25D366',
+            color: 'white',
+            width: 60,
+            height: 60,
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '2rem',
+            boxShadow: '0 0 20px rgba(37, 211, 102, 0.7)',
+            zIndex: 1000,
+            transition: "transform 0.2s",
+          }}
+          onMouseEnter={(e) => (e.target.style.transform = "scale(1.1)")}
+          onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+          aria-label="Contactează-ne pe WhatsApp"
+        >
+          <span style={{ marginTop: 5 }}>💬</span>
+        </a>
+
+        <footer
+          style={{
+            width: "100%",
+            padding: "15px 25px",
+            textAlign: "center",
+            borderTop: "3px solid #A52A2A",
+            backgroundColor: "rgba(47, 79, 79, 0.9)",
+            color: "#FFC0CB",
+            fontSize: "0.9rem",
+            userSelect: "none",
+            marginTop: "auto",
           }}
         >
-          <img
-            src={modalImg}
-            alt="Imagine mărită"
-            style={{
-              maxWidth: "90vw",
-              maxHeight: "90vh",
-              borderRadius: 15,
-              boxShadow: "0 0 30px rgba(255, 255, 255, 0.8)",
-              userSelect: "none",
-            }}
-            draggable={false}
-          />
-        </div>
-      )}
-
-      <a 
-        href="https://wa.me/40740591626" 
-        target="_blank" 
-        rel="noreferrer"
-        style={{
-          position: 'fixed',
-          bottom: 30,
-          right: 30,
-          backgroundColor: '#25D366',
-          color: 'white',
-          width: 60,
-          height: 60,
-          borderRadius: '50%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: '2rem',
-          boxShadow: '0 0 20px rgba(37, 211, 102, 0.7)',
-          zIndex: 1000
-        }}
-        aria-label="Contactează-ne pe WhatsApp"
-      >
-        <span style={{ marginTop: 5 }}>💬</span>
-      </a>
-
-      <footer
-        style={{
-          width: "100%",
-          padding: "15px 25px",
-          textAlign: "center",
-          borderTop: "3px solid #A52A2A",
-          backgroundColor: "rgba(47, 79, 79, 0.9)",
-          color: "#FFC0CB",
-          fontSize: "0.9rem",
-          userSelect: "none",
-          marginTop: "auto",
-        }}
-      >
-        <p style={{ margin: 0 }}>
-          © Toate drepturile rezervate MXF SEVEN | 
-          Telefon: <a href="tel:+40740591626" style={{ color: "#FFC0CB", textDecoration: 'none' }}>0740 591 626</a>
-        </p>
-      </footer>
-    </div>
+          <p style={{ margin: 0 }}>
+            © Toate drepturile rezervate MXF SEVEN | 
+            Telefon: <a href="tel:+40740591626" style={{ color: "#FFC0CB", textDecoration: 'none' }}>0740 591 626</a>
+          </p>
+        </footer>
+      </div>
+    </>
   );
 }
