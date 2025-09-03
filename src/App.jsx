@@ -3,29 +3,32 @@ import { Helmet } from "react-helmet";
 
 // Extended to 70 posts (6 real + 64 dummy for demonstration)
 const instagramPostsComplete = [
-  "https://www.instagram.com/reel/DLIVmsvtMxr/",
-  "https://www.instagram.com/reel/DFNLltsNgt5/",
-  "https://www.instagram.com/reel/DMkoQCDsK1J/",
-  "https://www.instagram.com/reel/DF3YaKBNacL/",
-  "https://www.instagram.com/reel/DFzuzKytlS8/",
-  "https://www.instagram.com/reel/DF2T8cgt601/",
-  ...Array.from({ length: 64 }, (_, i) => `https://www.instagram.com/reel/dummy${i + 1}/`)
+  "https://www.instagram.com/p/DNZ0N4pM04M/",
+  "https://www.instagram.com/p/DNWDh_CMNTr/",
+  "https://www.instagram.com/p/DNKeWlaMBw6/",
+  "https://www.instagram.com/p/DNIAcFwstNn/",
+  "https://www.instagram.com/p/DNc9knjMmd7/",
+  "https://www.instagram.com/p/DNDa--DNgTQ/",
+  "https://www.instagram.com/p/DNAVNu2s8OR/",
+  "https://www.instagram.com/p/DM40PQ8sCBh/",
+  "https://www.instagram.com/p/DLXyZ1oNSMp/",
+  "https://www.instagram.com/p/DNPaNFksRWv/",
+  "https://www.instagram.com/p/DNvx36S2MSY/",
 ];
 
 // Extended descriptions for the 6 real posts; dummy posts get generic descriptions
 const postDescriptions = {
-  "https://www.instagram.com/reel/DLIVmsvtMxr/": "Detailing auto mobil în Borșa, Maramureș - interior curățat perfect",
-  "https://www.instagram.com/reel/DFNLltsNgt5/": "Produse detailing auto disponibile pe MXF Seven",
-  "https://www.instagram.com/reel/DMkoQCDsK1J/": "Prezentare MXF Seven - servicii premium de detailing",
-  "https://www.instagram.com/reel/DF3YaKBNacL/": "MXF Seven - detailing auto premium",
-  "https://www.instagram.com/reel/DFzuzKytlS8/": "Servicii detailing MXF Seven",
-  "https://www.instagram.com/reel/DF2T8cgt601/": "Curățare mașini la MXF Seven",
-  ...Object.fromEntries(
-    Array.from({ length: 64 }, (_, i) => [
-      `https://www.instagram.com/reel/dummy${i + 1}/`,
-      `Postare de test ${i + 1} pentru detailing auto`
-    ])
-  )
+  "https://www.instagram.com/p/DNZ0N4pM04M/": "Detailing auto mobil în Borșa, Maramureș - interior curățat perfect",
+  "https://www.instagram.com/p/DNWDh_CMNTr/": "Produse detailing auto disponibile pe MXF Seven",
+  "https://www.instagram.com/p/DNKeWlaMBw6/": "Prezentare MXF Seven - servicii premium de detailing",
+  "https://www.instagram.com/p/DNIAcFwstNn/": "MXF Seven - detailing auto premium",
+  "https://www.instagram.com/p/DNc9knjMmd7/": "Servicii detailing MXF Seven",
+  "https://www.instagram.com/p/DNDa--DNgTQ/": "MXF SEVEN Detailing Auto Borșa Maramureș",
+  "https://www.instagram.com/p/DNAVNu2s8OR/": "MXF SEVEN Curatare Auto Borșa Maramureș",
+  "https://www.instagram.com/p/DM40PQ8sCBh/": "MXF SEVEN CHIMIC AUTO BORSA",
+  "https://www.instagram.com/p/DLXyZ1oNSMp/": "MXF SEVEN DETAILING AUTO MOBIL",
+  "https://www.instagram.com/p/DNPaNFksRWv/": "MXF SEVEN CAR DETAILING BORSA MARAMURES",
+  "https://www.instagram.com/p/DNvx36S2MSY/": "MXF SEVEN SERVICII DETAILING AUTO",
 };
 
 // Shuffle function for randomizing posts
@@ -56,7 +59,7 @@ export default function App() {
   const [instagramPostsPrincipale, setInstagramPostsPrincipale] = useState([]);
   const [embedLoaded, setEmbedLoaded] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 10;
+  const postsPerPage = 12;
 
   useEffect(() => {
     // Randomize all 70 posts for homepage
