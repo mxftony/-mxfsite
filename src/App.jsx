@@ -1,13 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet";
 
-const instagramPostsPrincipale = [
-  "https://www.instagram.com/reel/DLIVmsvtMxr/",
-  "https://www.instagram.com/reel/DFNLltsNgt5/",
-  "https://www.instagram.com/reel/DMkoQCDsK1J/",
-  "https://www.instagram.com/reel/DF3YaKBNacL/"
-];
-
 const instagramPostsComplete = [
   "https://www.instagram.com/reel/DLIVmsvtMxr/",
   "https://www.instagram.com/reel/DFNLltsNgt5/",
@@ -33,19 +26,40 @@ export default function App() {
     nume: '',
     telefon: '',
     email: '',
-    data: '',
     mesaj: ''
   });
+  const [instagramPostsPrincipale, setInstagramPostsPrincipale] = useState([]);
+  const [embedLoaded, setEmbedLoaded] = useState(false);
 
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = "//www.instagram.com/embed.js";
-    script.async = true;
-    document.body.appendChild(script);
+    // Select 4 random posts for home page
+    const shuffled = [...instagramPostsComplete].sort(() => 0.5 - Math.random());
+    setInstagramPostsPrincipale(shuffled.slice(0, 4));
+
+    // Load Instagram embed script if not loaded
+    if (!document.getElementById('instagram-embed-script')) {
+      const script = document.createElement('script');
+      script.id = 'instagram-embed-script';
+      script.src = "//www.instagram.com/embed.js";
+      script.async = true;
+      script.onload = () => {
+        setEmbedLoaded(true);
+      };
+      document.body.appendChild(script);
+    } else {
+      setEmbedLoaded(true);
+    }
+
     return () => {
-      document.body.removeChild(script);
+      // Cleanup if needed
     };
   }, []);
+
+  useEffect(() => {
+    if (embedLoaded && window.instgrm) {
+      window.instgrm.Embeds.process();
+    }
+  }, [pagina, embedLoaded, modalPost]);
 
   const getEmbedCode = (url) => `
     <blockquote class="instagram-media" data-instgrm-permalink="${url}" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"></blockquote>
@@ -95,6 +109,23 @@ export default function App() {
     fontSize: '1rem'
   };
 
+  const embedContainerStyle = {
+    width: '100%',
+    maxWidth: '540px',
+    margin: '0 auto',
+    overflow: 'hidden',
+    position: 'relative',
+    paddingBottom: '125%', // Aspect ratio for Instagram posts (roughly 1:1.25 for reels)
+  };
+
+  const embedInnerStyle = {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+  };
+
   const Header = () => (
     <header
       style={{
@@ -114,8 +145,10 @@ export default function App() {
           marginBottom: 10,
           objectFit: "contain",
           userSelect: "none",
+          cursor: 'pointer',
         }}
         draggable={false}
+        onClick={() => goTo('home')}
       />
       <h1
         style={{
@@ -220,21 +253,21 @@ export default function App() {
         >
           {instagramPostsPrincipale.map((url, i) => (
             <div
-              key={i}
+              key={url + i} // Unique key with url to force remount if random changes
               onClick={() => openModal(url)}
               style={{
                 cursor: "pointer",
                 borderRadius: 18,
                 boxShadow: "0 6px 18px rgba(139, 0, 0, 0.7)",
-                overflow: "hidden",
                 transition: "transform 0.3s",
+                ...embedContainerStyle
               }}
               onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
               onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
               title={postDescriptions[url]}
               aria-label={`Post Instagram detailing auto ${i + 1}`}
             >
-              <div dangerouslySetInnerHTML={{ __html: getEmbedCode(url) }} />
+              <div style={embedInnerStyle} dangerouslySetInnerHTML={{ __html: getEmbedCode(url) }} />
             </div>
           ))}
         </div>
@@ -435,21 +468,21 @@ export default function App() {
       >
         {instagramPostsComplete.map((url, i) => (
           <div
-            key={i}
+            key={url + i}
             onClick={() => openModal(url)}
             style={{
               cursor: "pointer",
               borderRadius: 18,
               boxShadow: "0 6px 18px rgba(139, 0, 0, 0.7)",
-              overflow: "hidden",
               transition: "transform 0.3s",
+              ...embedContainerStyle
             }}
             onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
             onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
             title={postDescriptions[url]}
             aria-label={`Post Instagram mașină ${i + 1}`}
           >
-            <div dangerouslySetInnerHTML={{ __html: getEmbedCode(url) }} />
+            <div style={embedInnerStyle} dangerouslySetInnerHTML={{ __html: getEmbedCode(url) }} />
           </div>
         ))}
       </div>
@@ -527,14 +560,6 @@ export default function App() {
           placeholder="Email"
           value={formData.email}
           onChange={handleChange}
-          style={inputStyle}
-        />
-        <input
-          type="date"
-          name="data"
-          value={formData.data}
-          onChange={handleChange}
-          required
           style={inputStyle}
         />
         <textarea
