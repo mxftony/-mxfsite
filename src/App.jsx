@@ -193,7 +193,7 @@ export default function App() {
           }
         }}
       >
-        MXF SEVEN - Detailing Auto Mobil Premium Borșa Maramureș
+        MXF SEVEN - Detailing Auto Mobil Premium Borsa Maramures
       </h1>
       <nav style={{ marginTop: 20, display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 10 }}>
         {['home', 'galerie', 'programare'].map(page => (
@@ -348,23 +348,23 @@ export default function App() {
         <div style={{ marginTop: 30 }}>
           {[
             {
-              titlu: 'Curățare completă interior',
-              descriere: 'Curățare profundă a tuturor suprafețelor inclusiv scaune, covorașe, plafonieră și zone greu accesibile',
-              durata: '3-5 ore',
-              pret: 'de la: sună pentru ofertă'
-            },
-            {
-              titlu: 'Detailing piele',
-              descriere: 'Curățare, hidratare și protecție pentru scaune și elemente din piele',
-              durata: '2-3 ore',
-              pret: 'de la: sună pentru ofertă'
-            },
-            {
-              titlu: 'Pachet premium',
-              descriere: 'Toate serviciile + tratament anti-bacterian și parfumare profesională',
-              durata: '5-7 ore',
-              pret: 'de la: sună pentru ofertă'
-            }
+    titlu: 'Curatare profesionala completa a interiorului',
+    descriere: 'Curatare si decontaminare in profunzime a tuturor suprafetelor interioare (scaune, tapiterie, covorase, plafon, bord si zone greu accesibile). Include aspirare, curatare cu solutii profesionale, indepartare pete si uscare profesionala pentru rezultate durabile.',
+    durata: '3-5 ore',
+    pret: 'Pret: la cerere - sunati pentru oferta'
+  },
+  {
+    titlu: 'Ingrijire si protectie pentru piele',
+    descriere: 'Curatare delicata, hidratare si aplicare de protectie UV pentru suprafete din piele. Previne uscarea si craparea, pastreaza aspectul si durabilitatea materialului.',
+    durata: '2-3 ore',
+    pret: 'Pret: la cerere - sunati pentru oferta'
+  },
+  {
+    titlu: 'Pachet Premium Detailing Complet',
+    descriere: 'Serviciu complet care include curatare interior si exterior, tratament antibacterian profesional, decontaminare, polish usor si parfumare profesionala. Recomandat pentru restaurare estetica si intretinere avansata.',
+    durata: '5-7 ore',
+    pret: 'Pret: la cerere - sunati pentru oferta'
+  }
           ].map((serviciu, i) => (
             <div key={i} style={{ 
               marginBottom: 25, 
